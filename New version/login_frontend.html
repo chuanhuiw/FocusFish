@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup | FocusFish</title>
+    <link rel="stylesheet" href="login_frontend.css">
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+
+<body background="Loginbg.png">
+    <header>
+        <h2 class="Logo">FocusFish</h2>
+        <h2 class="tagline">Keep your Focus and Fish for success</h2>
+        <nav class="navigation">
+            <a href="About.html" id='about' class='a'>About</a>
+            <a href="Help.html" class='a'>Help</a>
+            <button class="Loginbtn" id='nav_button'>Login</button>
+        </nav>
+    </header>
+
+    <center>
+        <div id="div1">
+            <h2 id="login_label">Login</h2>
+            <p id="enterEmail_label">Enter E-mail: </p>
+            <span class="icon"><ion-icon name="mail-open"></ion-icon></span>
+            <input type="text" id="userEmail" name="email" placeholder="E-mail" />
+            <p id="enterPassword_label">Enter your Password: </p>
+            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+            <input type="password" id="input_password" name="password" placeholder="Password" />
+            <br>
+            <br>
+            <button class='button' id='login_button'>Login</button>
+            <br>
+            <br>
+            <p>Don't have an account? </p>
+            <a href="signup_frontend.html">Click Here</a>
+        </div>
+    </center>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOlLoetmD0IRyDx7ANI8cpYx9iEPzvthM",
+            authDomain: "focusfish-loginsignup.firebaseapp.com",
+            databaseURL: "https://focusfish-loginsignup-default-rtdb.firebaseio.com",
+            projectId: "focusfish-loginsignup",
+            storageBucket: "focusfish-loginsignup.appspot.com",
+            messagingSenderId: "214356844933",
+            appId: "1:214356844933:web:b994543ac7ea617ff7e4ec",
+            measurementId: "G-LB13TLGZQC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const database = getDatabase(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginButton = document.getElementById('login_button');
+            loginButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log("Login button clicked");
+
+                var email = document.getElementById('userEmail').value;
+                var pass_word = document.getElementById('input_password').value;
+
+                console.log("Email:", email, "Password:", pass_word);
+
+                signInWithEmailAndPassword(auth, email, pass_word)
+                    .then((userCredential) => {
+                        // Signed in 
+                        const user = userCredential.user;
+                        const dt = new Date();
+
+                        update(ref(database, 'users/' + user.uid), {
+                            last_login: dt,
+                        }).then(() => {
+                            console.log("User logged in:", user.uid);
+                            alert('User Logged In!');
+                            // Redirect to another page or perform other actions after successful login
+                            window.location.href = "home.html";
+                        }).catch((error) => {
+                            console.error("Error updating last login:", error);
+                        });
+                    })
+                    .catch((error) => {
+                        const errorMessage = error.message;
+                        console.error("Error logging in user:", errorMessage);
+                        alert(errorMessage);
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

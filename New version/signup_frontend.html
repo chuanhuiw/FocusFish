@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup | FocusFish</title>
+    <link rel="stylesheet" href="login_frontend.css">
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+</head>
+
+<body background="Loginbg.png">
+    <header>
+        <h2 class="Logo">FocusFish</h2>
+        <h2 class="tagline">Keep your Focus and Fish for success</h2>
+        <nav class="navigation">
+            <a href="About.html" id='about' class='a'>About</a>
+            <a href="Help.html" class='a'>Help</a>
+            <button class="Loginbtn" id='nav_button' onclick="login_nav()">Login</button>
+        </nav>
+    </header>
+
+    <center>
+        <div id="div2">
+            <h2 id="signup_label">SignUp</h2>
+
+            <p id="enterEmail_label">Enter E-mail: </p>
+            <span class="icon"><ion-icon name="mail-open"></ion-icon></span>
+            <input type="text" id="userEmail" name="email" placeholder="E-mail" />
+            <p id="createUsername_label">Create your Username: </p>
+            <span class="icon"><ion-icon name="person"></ion-icon></span>
+            <input type="text" id="input_createUsername" name="createUsername" placeholder="Username" />
+            <p id="createPassword_label">Create your Password: </p>
+            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+            <input type="password" id="input_createPassword" name="createPassword" placeholder="Password" />
+            <p id="cnfmPassword_label">Confirm your Password: </p>
+            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+            <input type="password" id="input_cnfmPassword" name="cnfmPassword" placeholder="Confirm Password" />
+            <input type="submit" id="signup_button" name="signup_submit" value="Sign Me Up!" />
+            <p>Have an account already? </p>
+            <a href="login_frontend.html">Click Here</a>
+        </div>
+    </center>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOlLoetmD0IRyDx7ANI8cpYx9iEPzvthM",
+            authDomain: "focusfish-loginsignup.firebaseapp.com",
+            databaseURL: "https://focusfish-loginsignup-default-rtdb.firebaseio.com",
+            projectId: "focusfish-loginsignup",
+            storageBucket: "focusfish-loginsignup.appspot.com",
+            messagingSenderId: "214356844933",
+            appId: "1:214356844933:web:b994543ac7ea617ff7e4ec",
+            measurementId: "G-LB13TLGZQC"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const signupButton = document.getElementById('signup_button');
+            signupButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log("Signup button clicked");
+
+                var email = document.getElementById('userEmail').value;
+                var user_name = document.getElementById('input_createUsername').value;
+                var pass_word = document.getElementById('input_createPassword').value;
+                var cnfm_pass_word = document.getElementById('input_cnfmPassword').value;
+
+                console.log("Email:", email, "Username:", user_name, "Password:", pass_word, "Confirm Password:", cnfm_pass_word);
+
+                if (pass_word === cnfm_pass_word) {
+                    createUserWithEmailAndPassword(auth, email, pass_word)
+                        .then((userCredential) => {
+                            // Signed up 
+                            const user = userCredential.user;
+                            console.log("User created:", user.uid);
+
+                            set(ref(database, 'users/' + user.uid), {
+                                username: user_name,
+                                email: email
+                            })
+                            .then(() => {
+                                console.log("Data saved successfully!");
+                                alert('User Created!');
+                                window.location.href = "login_frontend.html";
+                            })
+                            .catch((error) => {
+                                console.error("Error saving data:", error);
+                            });
+                        })
+                        .catch((error) => {
+                            const errorMessage = error.message;
+                            console.error("Error creating user:", errorMessage);
+                            alert(errorMessage);
+                        });
+                } else {
+                    alert("Passwords do not match. Please try again.");
+                }
+            });
+        });
+    </script>
+    <script src="signup.js"></script>
+</body>
+
+</html>
