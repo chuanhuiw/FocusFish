@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset = "UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name = "viewpoint" content="width=device-widtch,initial-scale = 1.0">
+    <title>Login and Signup | FocusFish</title>
+    <link rel="stylesheet" href = "login_frontend.css">
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    
+    <script src="signup.js"></script>
+
+</head>
+
+<body background="Loginbg.png">
+    <header>
+        <h2 class="Logo">FocusFish</h2>
+        <h2 class="tagline">Keep your Focus and Fish for success</h2>
+        <nav class = "navigation">
+            <a href="About.html", id = 'about', class = 'a'>About</a>
+            <a href="Help.html", class = 'a'>Help</a>
+            <button class="Loginbtn", id = 'nav_button', onclick ="login_nav()">Login</button>
+        </nav>
+    </header>
+
+
+
+
+    <center>
+        <div id="div2">
+            <h2 id = "signup_label">SignUp</h2>
+            <p id = "createUsername_label">Create your Username: </p>
+            <span class = "icon"><ion-icon name="person"></ion-icon></span>
+            <input id = "input_createUsername">
+            <p id = "createPassword_label">Create your Password: </p>
+            <span class = "icon"><ion-icon name="lock-closed"></ion-icon></span>
+            <input id = "input_createPassword">
+            <p id = "cnfmPassword_label">Confirm your Password: </p>
+            <span class = "icon"><ion-icon name="lock-closed"></ion-icon></span>
+            <input id = "input_cnfmPassword">
+            <br>
+            <br>
+            <button class = 'button', id = 'signup_button', onclick="signup()">Sign me Up!</button>
+            <p>Have an account already? </p>
+            <a href = "login_frontend.html">Click Here</a>
+        </div>
+       
+    </center>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+</body>
+
+
+</html>
